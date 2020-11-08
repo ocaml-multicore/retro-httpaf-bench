@@ -25,3 +25,12 @@ jobs:
       # Runs a single command using the runners shell
       - name: Build docker image
         run: docker build -t retro-httpaf-bench .
+
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: ${{ github.repository }}/benchmark-image
+          tag_with_ref: true
