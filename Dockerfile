@@ -2,7 +2,7 @@ FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 RUN ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
 RUN apt update && apt install -y libev4 libev-dev opam pkg-config build-essential libssl-dev libz-dev cmake python3-virtualenv python3-pip && dpkg-reconfigure --frontend noninteractive tzdata
-RUN mkdir build
+RUN mkdir ./build
 WORKDIR ./build
 
 COPY ./setup_opams.sh .
@@ -16,6 +16,7 @@ COPY ./httpaf-lwt ./httpaf-lwt
 COPY ./nethttp-go ./nethttp-go
 COPY ./build_benchmarks.sh .
 RUN ./build_benchmarks.sh
+RUN rm -rf ./build/_opam
 
 COPY ./build_wrk2.sh .
 COPY ./wrk2-support/json.lua .
