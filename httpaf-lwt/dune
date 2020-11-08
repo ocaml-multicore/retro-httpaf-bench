@@ -1,0 +1,3 @@
+(executable
+ (name httpaf_lwt)
+ (libraries httpaf lwt lwt.unix httpaf-lwt-unix core unix))
