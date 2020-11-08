@@ -25,5 +25,5 @@ jobs:
       # Runs a single command using the runners shell
       - name: Install docker and build image
         run: |
-          apt install -y docker.io
-          docker build -t retro-httpaf-bench
+          sudo apt install -y docker.io
+          sudo docker build -t retro-httpaf-bench
