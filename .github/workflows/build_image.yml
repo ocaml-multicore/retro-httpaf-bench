@@ -24,4 +24,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Build docker image
-        run: docker build -t retro-httpaf-bench
+        run: docker build -t retro-httpaf-bench .
