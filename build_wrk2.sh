@@ -8,4 +8,7 @@ rm master.zip
 cd wrk2-master
 make
 mv wrk ../wrk2
+cd ..
 rm -rf wrk2-master
+
+cp ./wrk2-support/json.lua .

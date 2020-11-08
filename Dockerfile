@@ -19,7 +19,7 @@ RUN ./build_benchmarks.sh
 RUN rm -rf ./build/_opam
 
 COPY ./build_wrk2.sh .
-COPY ./wrk2-support/json.lua .
+COPY ./wrk2-support/json.lua ./wrk2-support/json.lua
 RUN ./build_wrk2.sh
 
 COPY ./build_mimalloc.sh .
