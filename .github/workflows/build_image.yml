@@ -23,7 +23,5 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
-      - name: Install docker and build image
-        run: |
-          sudo apt install -y docker.io
-          sudo docker build -t retro-httpaf-bench
+      - name: Build docker image
+        run: docker build -t retro-httpaf-bench
