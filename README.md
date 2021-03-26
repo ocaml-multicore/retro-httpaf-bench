@@ -1,5 +1,7 @@
 # retro-httpaf-bench
 
+[![CI](https://github.com/sadiqj/retro-httpaf-bench/actions/workflows/build_image.yml/badge.svg)](https://github.com/sadiqj/retro-httpaf-bench/actions/workflows/build_image.yml)
+
 Set of scripts for building and running some http server benchmarks. More details to come.
 
 The Dockerfile can be used to build a container that will run everything but care has been taken so you should be able to run the scripts individually themselves in the following order:
