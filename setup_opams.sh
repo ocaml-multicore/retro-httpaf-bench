@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+export OPAMYES=1
 export OPAMROOT=`pwd`/_opam
 
 opam init --disable-sandboxing
