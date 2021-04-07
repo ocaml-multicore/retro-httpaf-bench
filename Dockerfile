@@ -1,6 +1,8 @@
 FROM ocaml/opam:debian-10-ocaml-4.12-domains-effects AS eio
 WORKDIR /src
-RUN opam depext -i ppx_cstruct dune fmt logs bheap cstruct faraday mtime ocplib-endian optint lwt-dllist
+RUN opam pin -n ocaml-migrate-parsetree 2.1.0+effect-syntax && \
+    opam pin -n ppxlib 0.22.0+effect-syntax
+RUN opam depext -i ppx_cstruct dune fmt logs bheap cstruct faraday mtime ocplib-endian optint lwt-dllist psq luv
 COPY --chown=opam httpaf-eio /src
 RUN sudo chown opam .
 RUN opam exec -- dune build --profile=release
@@ -39,4 +41,4 @@ WORKDIR /
 
 COPY ./run_benchmarks.sh .
 COPY --from=eio /src/_build/default/wrk_effects_benchmark.exe ./build/httpaf_eio.exe
-CMD ./run_benchmarks.sh && tail -f /dev/null
+CMD ./run_benchmarks.sh

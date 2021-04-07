@@ -5,6 +5,7 @@ run_duration="${RUN_DURATION:-60}"
 
 export GOMAXPROCS=1
 
+rm -rf output/*
 mkdir -p output
 
 for cmd in "httpaf_eio.exe" "rust_hyper.exe" "cohttp_lwt_unix.exe" "httpaf_lwt.exe" "httpaf_effects.exe" "nethttp_go.exe"; do
@@ -23,3 +24,4 @@ done
 source build/pyenv/bin/activate
 mv build/parse_output.ipynb .
 jupyter nbconvert --to html --execute parse_output.ipynb
+mv parse_output* output/
