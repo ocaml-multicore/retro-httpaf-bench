@@ -10,7 +10,7 @@ module BenchmarkServer = struct
       match Uri.path uri with
       | "/" -> Server.respond_string ~headers ~status:`OK ~body:text ()
       | "/exit" -> exit 0
-      | _   -> Server.respond_string ~headers ~status:`Not_found ~body:"Route not found" ()
+      | _   -> Server.respond_not_found ()
     in
     handler
   ;;
