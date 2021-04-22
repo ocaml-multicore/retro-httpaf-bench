@@ -26,8 +26,8 @@ jobs:
       - name: Build docker image
         run: docker build -t retro-httpaf-bench .
 
-      - if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-      	name: Push to GitHub Packages
+      - name: Push to GitHub Packages
+      	if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
         uses: docker/build-push-action@v1
         with:
           username: ${{ github.actor }}
