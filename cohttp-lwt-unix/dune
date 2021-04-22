@@ -1,0 +1,3 @@
+(executable
+ (name cohttp_lwt_unix)
+ (libraries conduit-lwt-unix cohttp-lwt-unix lwt))

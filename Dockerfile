@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 RUN ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
-RUN apt update && apt install -y libev4 libev-dev opam pkg-config build-essential libssl-dev libz-dev cmake python3-virtualenv python3-pip && dpkg-reconfigure --frontend noninteractive tzdata
+RUN apt update && apt install -y libgmp-dev libev4 libev-dev opam pkg-config build-essential libssl-dev libz-dev cmake python3-virtualenv python3-pip && dpkg-reconfigure --frontend noninteractive tzdata 
 RUN mkdir ./build
 WORKDIR ./build
 
@@ -11,6 +11,7 @@ RUN ./setup_opams.sh
 COPY ./setup_go.sh .
 RUN ./setup_go.sh
 
+COPY ./cohttp-lwt-unix ./cohttp-lwt-unix
 COPY ./httpaf-effects ./httpaf-effects
 COPY ./httpaf-lwt ./httpaf-lwt
 COPY ./nethttp-go ./nethttp-go

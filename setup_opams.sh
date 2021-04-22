@@ -11,4 +11,4 @@ opam pin -n aeio git+https://github.com/kayceesrk/ocaml-aeio.git
 opam install -y conf-libev httpaf lwt dune aeio
 
 opam switch create 4.10.0
-opam install -y conf-libev lwt core httpaf httpaf-lwt-unix
+opam install -y conf-libev lwt core httpaf httpaf-lwt-unix cohttp-lwt-unix
