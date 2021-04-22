@@ -13,12 +13,15 @@ module BenchmarkServer = struct
       | _   -> Server.respond_string ~headers ~status:`Not_found ~body:"Route not found" ()
     in
     handler
+  ;;
 
 end
 
-let main port =
+let main port max_active io_buf =
   let handler = BenchmarkServer.benchmark in
   Lwt_engine.set (new Lwt_engine.libev ()) ;
+  if max_active > 0 then Conduit_lwt_unix.set_max_active max_active;
+  Lwt_io.set_default_buffer_size io_buf;
   let open Cohttp_lwt_unix in
   let server = Server.create
     ~ctx:(Net.init ())
@@ -30,9 +33,14 @@ let main port =
 
 let () =
   let port = ref 8080 in
+  let max_active = ref 0 in
+  let io_buf = ref 0x10_000 in
   Arg.parse
-    ["-p", Arg.Set_int port, " Listening port number (8080 by default)"]
+    [ "-p", Arg.Set_int port, " Listening port number (8080 by default)"
+    ; "-m", Arg.Set_int max_active, " Set max active connections (unlimited by default)"
+    ; "-i", Arg.Set_int io_buf, " Lwt_io default buffer size (64k by default)"
+    ]
     ignore
     "Responds to requests with a fixed string for benchmarking purposes.";
-  main !port
+  main !port !max_active !io_buf
 ;;
