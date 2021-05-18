@@ -32,7 +32,7 @@ let create_connection_handler ?config request_handler =
             end;
             reader_thread ()
         | `Yield       -> 
-            let tid = if debug then Aeio.get_tid () else 0xC0FFEE in
+            (* let tid = if debug then Aeio.get_tid () else 0xC0FFEE in *)
             let iv = Aeio.IVar.create () in
             Server_connection.yield_reader conn (fun () ->
               Aeio.IVar.fill iv ());
@@ -59,7 +59,7 @@ let create_connection_handler ?config request_handler =
           end;
           writer_thread ()
         | `Yield        -> 
-            let tid = if debug then Aeio.get_tid () else 0xC0FFEE in
+            (* let tid = if debug then Aeio.get_tid () else 0xC0FFEE in *)
             let iv = Aeio.IVar.create () in
             Server_connection.yield_writer conn (fun () ->
               Aeio.IVar.fill iv ());
