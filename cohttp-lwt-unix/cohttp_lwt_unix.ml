@@ -8,14 +8,11 @@ module BenchmarkServer = struct
       let open Lwt in
       let open Cohttp_lwt_unix in
       let uri = Request.uri req in
+      Lwt_unix.yield () >>= fun () ->
       match Uri.path uri with
-      | "/" ->
-        Lwt_unix.yield () >>= fun () ->
-        Server.respond_string ~headers ~status:`OK ~body:text ()
+      | "/" -> Server.respond_string ~headers ~status:`OK ~body:text ()
       | "/exit" -> exit 0
-      | _   ->
-        Lwt_unix.yield () >>= fun () ->
-        Server.respond_not_found ()
+      | _   -> Server.respond_not_found ()
     in
     handler
   ;;

@@ -14,10 +14,14 @@ module BenchmarkServer = struct
       let { Request.target; _ } = Reqd.request reqd in
       let request_body          = Reqd.request_body reqd in
       Body.close_reader request_body;
-      match target with
+      let open Lwt in
+      Lwt.async @@ fun () ->
+      Lwt_unix.yield () >>= fun () ->
+      (match target with
       | "/" -> Reqd.respond_with_bigstring reqd (Response.create ~headers `OK) text;
       | "/exit" -> Caml.exit 0;
-      | _   -> Reqd.respond_with_string    reqd (Response.create `Not_found) "Route not found"
+      | _   -> Reqd.respond_with_string    reqd (Response.create `Not_found) "Route not found");
+      Lwt.return_unit
     in
     handler
   ;;
