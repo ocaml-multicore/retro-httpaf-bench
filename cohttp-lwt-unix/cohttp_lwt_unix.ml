@@ -5,8 +5,10 @@ module BenchmarkServer = struct
   let benchmark =
     let headers = Cohttp.Header.of_list ["content-length", Int.to_string (String.length text)] in
     let handler _conn req _body =
+      let open Lwt in
       let open Cohttp_lwt_unix in
       let uri = Request.uri req in
+      Lwt_unix.yield () >>= fun () ->
       match Uri.path uri with
       | "/" -> Server.respond_string ~headers ~status:`OK ~body:text ()
       | "/exit" -> exit 0
