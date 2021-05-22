@@ -16,7 +16,7 @@ module BenchmarkServer = struct
       Body.close_reader request_body;
       let open Lwt in
       Lwt.async @@ fun () ->
-      Lwt_unix.yield () >>= fun () ->
+      Lwt.pause () >>= fun () ->
       (match target with
       | "/" -> Reqd.respond_with_bigstring reqd (Response.create ~headers `OK) text;
       | "/exit" -> Caml.exit 0;
