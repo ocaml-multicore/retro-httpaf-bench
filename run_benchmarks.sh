@@ -6,7 +6,7 @@ export LD_PRELOAD=`pwd`/build/libmimalloc.so
 
 mkdir -p output
 
-for cmd in "cohttp_lwt_unix.exe" "httpaf_lwt.exe" "httpaf_effects.exe" "nethttp_go.exe"; do
+for cmd in "rust-hyper.exe" "cohttp_lwt_unix.exe" "httpaf_lwt.exe" "httpaf_effects.exe" "nethttp_go.exe"; do
   for rps in 2500 5000 10000 15000 20000 25000 30000 35000 40000 45000 50000 55000 60000; do
     for cons in 1000; do
       ./build/$cmd &
