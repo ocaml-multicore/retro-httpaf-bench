@@ -19,3 +19,8 @@ mv _build/default/cohttp_lwt_unix.exe ..
 # Now we build the go one with 1.15
 cd .. && go/bin/go build nethttp-go/httpserv.go
 mv httpserv nethttp_go.exe
+
+# Last we build rust-hyper
+cd .. && cd rust-hyper
+cargo build --release
+mv target/release/rust-hyper ../rust-hyper.exe
