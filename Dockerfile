@@ -24,9 +24,6 @@ COPY ./build_wrk2.sh .
 COPY ./wrk2-support/json.lua ./wrk2-support/json.lua
 RUN ./build_wrk2.sh
 
-COPY ./build_mimalloc.sh .
-RUN ./build_mimalloc.sh
-
 COPY ./build_jupyter.sh .
 COPY ./notebook/parse_output.ipynb .
 RUN ./build_jupyter.sh

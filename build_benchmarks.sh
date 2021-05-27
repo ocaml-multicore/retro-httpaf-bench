@@ -6,14 +6,14 @@ export OPAMROOT=`pwd`/_opam
 
 # Build effects http server with multicore
 opam switch 4.12.0+domains+effects
-cd httpaf-effects && opam exec dune build
+cd httpaf-effects && opam exec -- dune build --profile=release
 mv _build/default/wrk_effects_benchmark.exe ../httpaf_effects.exe
 
 # Use trunk 4.10.0 for the lwt http server
 opam switch 4.12.0
-cd ../httpaf-lwt && opam exec dune build
+cd ../httpaf-lwt && opam exec -- dune build --profile=release
 mv _build/default/httpaf_lwt.exe ..
-cd ../cohttp-lwt-unix && opam exec dune build
+cd ../cohttp-lwt-unix && opam exec -- dune build --profile=release
 mv _build/default/cohttp_lwt_unix.exe ..
 
 # Now we build the go one with 1.15
@@ -23,5 +23,5 @@ mv httpserv nethttp_go.exe
 # Last we build rust-hyper
 cd rust-hyper
 cargo build --release
-mv target/release/rust-hyper ../rust-hyper.exe
+mv target/release/rust-hyper ../rust_hyper.exe
 cd ..

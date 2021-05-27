@@ -10,6 +10,5 @@ The Dockerfile can be used to build a container that will run everything but car
 1. `setup_go.sh`
 1. `build_benchmarks.sh`
 1. `build_wrk2.sh`
-1. `build_mimalloc.sh`
 1. `build_jupyter.sh`
 1. `run_benchmarks.sh`
