@@ -4,7 +4,6 @@ set -xe
 run_duration="${RUN_DURATION:-60}"
 
 export GOMAXPROCS=1
-export LD_PRELOAD=`pwd`/build/libmimalloc.so
 
 mkdir -p output
 
