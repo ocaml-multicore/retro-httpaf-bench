@@ -1,0 +1,5 @@
+(executable 
+ (name wrk_effects_benchmark)
+ (libraries eunix httpaf httpaf-eio faraday angstrom logs.fmt))
+
+(vendored_dirs vendor)
