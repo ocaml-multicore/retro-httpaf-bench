@@ -23,5 +23,5 @@ mv httpserv nethttp_go.exe
 # Last we build rust-hyper
 cd rust-hyper
 cargo build --release
-mv target/release/rust-hyper ../rust-hyper.exe
+mv target/release/rust-hyper ../rust_hyper.exe
 cd ..
