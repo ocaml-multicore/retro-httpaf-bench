@@ -1,0 +1,3 @@
+(executable
+  (name httpaf_shuttle_async)
+  (libraries shuttle core async httpaf))
