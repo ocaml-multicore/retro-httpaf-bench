@@ -63,7 +63,7 @@ let main port max_accepts_per_batch () =
   let where_to_listen = Tcp.Where_to_listen.of_port port in
   let request_handler _ = benchmark in
   let error_handler _ = error_handler in
-  let server =
+  let _server =
     Tcp.(
       Server.create_sock_inet
         ~on_handler_error:`Ignore
@@ -83,9 +83,6 @@ let main port max_accepts_per_batch () =
           writer
         >>= fun () -> Output_channel.close writer >>= fun () -> Input_channel.close reader)
   in
-  Deferred.forever () (fun () ->
-      Clock.after Time.Span.(of_sec 1.)
-      >>| fun () -> Log.Global.printf "conns: %d" (Tcp.Server.num_connections server));
   Deferred.never ()
 ;;
 
