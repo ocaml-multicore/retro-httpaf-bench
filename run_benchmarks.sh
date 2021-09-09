@@ -8,7 +8,7 @@ export GOMAXPROCS=1
 rm -rf output/*
 mkdir -p output
 
-for cmd in "httpaf_eio.exe" "rust_hyper.exe" "cohttp_lwt_unix.exe" "httpaf_lwt.exe" "httpaf_effects.exe" "nethttp_go.exe"; do
+for cmd in "httpaf_eio.exe" "rust_hyper.exe" "cohttp_lwt_unix.exe" "httpaf_lwt.exe" "httpaf_effects.exe" "nethttp_go.exe" "httpaf_shuttle_async.exe"; do
   for rps in 1000 25000 50000 75000 100000 150000; do
     for cons in 1000; do
       ./build/$cmd &

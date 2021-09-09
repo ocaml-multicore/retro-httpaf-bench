@@ -23,6 +23,7 @@ RUN ./setup_go.sh
 COPY ./cohttp-lwt-unix ./cohttp-lwt-unix
 COPY ./httpaf-effects ./httpaf-effects
 COPY ./httpaf-lwt ./httpaf-lwt
+COPY ./httpaf-shuttle-async ./httpaf-shuttle-async
 COPY ./nethttp-go ./nethttp-go
 COPY ./rust-hyper ./rust-hyper
 COPY ./build_benchmarks.sh .

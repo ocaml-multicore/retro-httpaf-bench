@@ -15,6 +15,8 @@ cd ../httpaf-lwt && opam exec -- dune build --profile=release
 mv _build/default/httpaf_lwt.exe ..
 cd ../cohttp-lwt-unix && opam exec -- dune build --profile=release
 mv _build/default/cohttp_lwt_unix.exe ..
+cd ../httpaf-shuttle-async && opam exec -- dune build --profile=release
+mv _build/default/httpaf_shuttle_async.exe ..
 
 # Now we build the go one with 1.15
 cd .. && go/bin/go build nethttp-go/httpserv.go
