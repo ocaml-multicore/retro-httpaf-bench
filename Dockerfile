@@ -1,8 +1,8 @@
-FROM ocaml/opam:debian-10-ocaml-4.12-domains-effects AS eio
+FROM ocaml/opam:debian-11-ocaml-4.12-domains AS eio
 WORKDIR /src
-RUN opam pin -n ocaml-migrate-parsetree 2.1.0+effect-syntax && \
-    opam pin -n ppxlib 0.22.0+effect-syntax
-RUN opam depext -i ppx_cstruct dune fmt logs bheap cstruct faraday mtime ocplib-endian optint lwt-dllist psq luv
+RUN opam depext -i ppx_cstruct dune fmt logs cstruct faraday mtime optint lwt-dllist psq luv
+COPY --chown=opam httpaf-eio/vendor/eio/*.opam /src/httpaf-eio/vendor/eio/
+RUN opam install --deps-only /src/httpaf-eio/vendor/eio/
 COPY --chown=opam httpaf-eio /src
 RUN sudo chown opam .
 RUN opam exec -- dune build --profile=release
