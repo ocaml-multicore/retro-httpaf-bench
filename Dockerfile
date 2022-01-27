@@ -7,6 +7,21 @@ COPY --chown=opam httpaf-eio /src
 RUN sudo chown opam .
 RUN opam exec -- dune build --profile=release
 
+# Build cohttp_eio.exe
+FROM ocaml/opam:debian-11-ocaml-4.12-domains AS cohttp-eio
+RUN sudo ln -f /usr/bin/opam-2.1 /usr/bin/opam
+RUN git -C ~/opam-repository pull origin master
+RUN opam update && opam upgrade -y
+WORKDIR /src
+RUN opam install ppx_cstruct dune fmt logs cstruct faraday mtime optint lwt-dllist psq luv luv_unix uri ppx_sexp_conv
+COPY --chown=opam cohttp-eio/vendor/eio/*.opam /src/cohttp-eio/vendor/eio/
+COPY --chown=opam cohttp-eio/vendor/ocaml-cohttp/*.opam /src/cohttp-eio/vendor/ocaml-cohttp/
+RUN opam pin --with-version dev /src/cohttp-eio/vendor/eio/
+RUN opam pin --with-version dev /src/cohttp-eio/vendor/ocaml-cohttp/
+COPY --chown=opam cohttp-eio /src
+RUN sudo chown opam .
+RUN opam exec -- dune build --profile=release
+
 FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND=noninteractive
 RUN ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
@@ -42,4 +57,5 @@ WORKDIR /
 
 COPY ./run_benchmarks.sh .
 COPY --from=eio /src/_build/default/wrk_effects_benchmark.exe ./build/httpaf_eio.exe
+COPY --from=cohttp-eio /src/_build/default/cohttp_eio.exe ./build/cohttp_eio.exe
 CMD ./run_benchmarks.sh

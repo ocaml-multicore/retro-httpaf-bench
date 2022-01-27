@@ -13,8 +13,11 @@ mv _build/default/wrk_effects_benchmark.exe ../httpaf_effects.exe
 opam switch 4.12.0
 cd ../httpaf-lwt && opam exec -- dune build --profile=release
 mv _build/default/httpaf_lwt.exe ..
+
+opam pin add git@github.com:mirage/ocaml-cohttp.git -y
 cd ../cohttp-lwt-unix && opam exec -- dune build --profile=release
 mv _build/default/cohttp_lwt_unix.exe ..
+
 cd ../httpaf-shuttle-async && opam exec -- dune build --profile=release
 mv _build/default/httpaf_shuttle_async.exe ..
 

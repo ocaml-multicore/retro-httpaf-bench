@@ -1,0 +1,5 @@
+(executable
+ (name cohttp_eio)
+ (libraries eio_main cohttp-eio cohttp uri))
+
+(vendored_dirs vendor)
