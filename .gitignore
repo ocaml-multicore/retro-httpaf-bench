@@ -3,3 +3,4 @@
 .merlin
 *.nix
 output*/**
+build

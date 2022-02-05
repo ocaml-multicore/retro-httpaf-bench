@@ -25,7 +25,7 @@ jobs:
           submodules: recursive
       # Runs a single command using the runners shell
       - name: Build docker image
-        run: docker build -t retro-httpaf-bench .
+        run: make build
 
       - name: Push to GitHub Packages
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
