@@ -1,6 +1,3 @@
-[submodule "httpaf-eio/eio"]
-	path = httpaf-eio/vendor/eio
-	url = https://github.com/talex5/eio.git
 [submodule "httpaf-eio/httpaf"]
 	path = httpaf-eio/vendor/httpaf
 	url = https://github.com/talex5/httpaf.git
