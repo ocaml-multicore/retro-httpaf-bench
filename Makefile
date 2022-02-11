@@ -21,7 +21,7 @@ run: build
 	docker run --rm -it --privileged -v $(PWD)/output:/output $(retro)
 
 main: build-dir
-	docker build $(nc) -q -t $(retro) .
+	docker build $(nc) -t $(retro) .
 
 build: cohttp-eio \
 	httpaf-eio \
@@ -31,7 +31,7 @@ build: cohttp-eio \
 	httpaf-shuttle-async \
 	nethttp-go \
 	rust-hyper
-	docker build -q -t $(retro) .
+	docker build -t $(nc) $(retro) .
 
 build-dir:
 	mkdir -p build
