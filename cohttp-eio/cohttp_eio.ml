@@ -30,19 +30,12 @@ let text =
 
 open Cohttp_eio
 
-let root : Server.handler =
- fun (req) ->
-  let uri = Request.resource req |> Uri.of_string in
-  match Uri.path uri with "/" -> Some (Response.text text) | _ -> None
-
-let exit : Server.handler =
- fun (req) ->
-  let uri = Request.resource req |> Uri.of_string in
-  match Uri.path uri with "/exit" -> exit 0 | _ -> None
-
-let app =
-  let open Server.Infix in
-  root >>? exit >>? Server.not_found
+let app req =
+  match Request.resource req with
+  | "/" -> Response.text text
+  | "/html" -> Response.html text
+  | "/exit" -> exit 0
+  | _ -> Response.not_found
 
 let () =
   let port = ref 8080 in
@@ -50,5 +43,5 @@ let () =
     [ ("-p", Arg.Set_int port, " Listening port number(8080 by default)") ]
     ignore "An HTTP/1.1 server";
 
-  let server = Server.create ~domains:1 ~port:!port app in
+  let server = Server.create ~port:!port app in
   Server.run server

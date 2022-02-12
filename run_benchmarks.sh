@@ -1,14 +1,14 @@
 #!/bin/bash
 set -xe
 
-run_duration="${RUN_DURATION:-10}"
+run_duration="${RUN_DURATION:-60}"
 
 export GOMAXPROCS=1
 
 rm -rf output/*
 mkdir -p output
 
-for cmd in "httpaf_eio.exe" "rust_hyper.exe" "cohttp_lwt_unix.exe" "httpaf_lwt.exe" "httpaf_effects.exe" "nethttp_go.exe" "httpaf_shuttle_async.exe" "cohttp_eio.exe"; do
+for cmd in "cohttp_eio.exe" "httpaf_eio.exe" "rust_hyper.exe" "cohttp_lwt_unix.exe" "httpaf_lwt.exe" "httpaf_effects.exe" "nethttp_go.exe" "httpaf_shuttle_async.exe"; do
 # for cmd in "httpaf_eio.exe" "cohttp_lwt_unix.exe" "httpaf_lwt.exe" "cohttp_eio.exe"; do
   for rps in 1000 50000 75000 150000 300000 400000; do
   # for rps in 150000 300000 400000; do
