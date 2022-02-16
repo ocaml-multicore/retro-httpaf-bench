@@ -31,7 +31,7 @@ build: cohttp-eio \
 	httpaf-shuttle-async \
 	nethttp-go \
 	rust-hyper
-	docker build -t $(nc) $(retro) .
+	docker build $(nc) -t $(retro) .
 
 build-dir:
 	mkdir -p build

@@ -1,10 +1,11 @@
 #!/bin/bash
 set -xe
 
-run_duration="${RUN_DURATION:-30}"
+run_duration="${RUN_DURATION:-60}"
 
-export GOMAXPROCS=1
-# export COHTTP_DOMAINS=48
+#export GOMAXPROCS=1
+export COHTTP_DOMAINS=48
+export HTTPAF_EIO_DOMAINS=24
 
 rm -rf output/*
 mkdir -p output
