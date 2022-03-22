@@ -1,5 +1,7 @@
 use std::io;
 use std::net::SocketAddr;
+use std::thread;
+use std::env;
 
 use futures::{Future, Stream};
 use hyper::server::conn::Http;
@@ -10,7 +12,24 @@ pub(crate) fn run<F>(per_connection: F)
 where
     F: Fn(TcpStream, &mut Http, &Handle) + Clone + Send + 'static,
 {
-    // Spawn only a single thread (to match Go and OCaml with effects)
+    // Spawn a thread for each available core, minus one, since we'll
+    // reuse the main thread as a server thread as well.
+    let cores =
+        match env::var("RUST_CORES") {
+            Ok(v) =>v.parse::<i32>().unwrap(),
+            Err(_) => 1,
+        };
+
+    println!("Starting {} cores...", cores);
+
+    for i in 1..cores {
+        println!("Running server in core {}", i);
+        let per_connection = per_connection.clone();
+        thread::spawn(move || {
+            server_thread(per_connection);
+        });
+    }
+    println!("Running server in core {}", 0);
     server_thread(per_connection);
 }
 
