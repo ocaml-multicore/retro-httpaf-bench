@@ -1,17 +1,18 @@
 #!/bin/bash
 set -xe
 
-run_duration="${RUN_DURATION:-45}"
+run_duration="${RUN_DURATION:-60}"
 
-export GOMAXPROCS=1
-export COHTTP_DOMAINS=1
-export HTTPAF_EIO_DOMAINS=1
+export GOMAXPROCS=24
+export COHTTP_DOMAINS=24
+export HTTPAF_EIO_DOMAINS=24
+export RUST_CORES=24
 
 rm -rf output/*
 mkdir -p output
 
-for cmd in "cohttp_eio.exe" "httpaf_eio.exe" "rust_hyper.exe" "cohttp_lwt_unix.exe" "httpaf_lwt.exe" "httpaf_effects.exe" "nethttp_go.exe" "httpaf_shuttle_async.exe"; do
-  for rps in 1000 50000 75000 150000 300000 400000 ; do
+for cmd in "cohttp_eio.exe" "httpaf_eio.exe" "rust_hyper.exe" "nethttp_go.exe"; do
+  for rps in 150000 300000 400000 800000 1500000; do
       ./build/$cmd &
       running_pid=$!
       sleep 2;

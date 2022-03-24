@@ -7,6 +7,8 @@ extern crate serde_derive;
 extern crate serde_json;
 extern crate tokio_core;
 
+/* This is adapted from the Techempower Hyper benchmark: https://github.com/TechEmpower/FrameworkBenchmarks/tree/master/frameworks/Rust/hyper */
+
 use futures::Future;
 
 use hyper::header::{HeaderValue, CONTENT_LENGTH, CONTENT_TYPE, SERVER};
