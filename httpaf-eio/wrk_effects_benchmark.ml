@@ -80,10 +80,9 @@ let () =
   (* Eio_luv.run @@ fun env -> *)
   Eio_linux.run ~queue_depth:2048 ?polling_timeout @@ fun env ->
   let n_domains =
-    match Sys.argv with
-    | [| _ |] -> 1
-    | [| _; n |] -> int_of_string n
-    | _ -> failwith "usage: wrk_effects_benchmark.exe N_DOMAINS"
+    match Sys.getenv_opt "HTTPAF_EIO_DOMAINS" with
+    | Some d -> int_of_string d
+    | None -> 1
   in
   main 8080 128
     ~net:(Eio.Stdenv.net env)
