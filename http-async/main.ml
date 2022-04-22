@@ -1,7 +1,6 @@
 open! Core
 open! Async
-open Httpaf
-open Shuttle
+open Http_async
 
 let text =
   "CHAPTER I. Down the Rabbit-Hole  Alice was beginning to get very tired of sitting by \
@@ -33,70 +32,27 @@ let text =
 
 let text = Bigstring.of_string text
 
-let benchmark =
-  let headers =
-    Headers.of_list [ "content-length", Int.to_string (Bigstringaf.length text) ]
-  in
-  let handler reqd =
-    let { Request.target; _ } = Reqd.request reqd in
-    let request_body = Reqd.request_body reqd in
-    Body.close_reader request_body;
-    match target with
-    | "/" -> Reqd.respond_with_bigstring reqd (Response.create ~headers `OK) text
-    | _ -> Reqd.respond_with_string reqd (Response.create `Not_found) "Route not found"
-  in
-  handler
-;;
-
-let error_handler ?request:_ error start_response =
-  let response_body = start_response Headers.empty in
-  (match error with
-  | `Exn exn ->
-    Body.write_string response_body (Exn.to_string exn);
-    Body.write_string response_body "\n"
-  | #Status.standard as error ->
-    Body.write_string response_body (Status.default_reason_phrase error));
-  Body.close_writer response_body
-;;
-
-let main port max_accepts_per_batch () =
-  let where_to_listen = Tcp.Where_to_listen.of_port port in
-  let request_handler _ = benchmark in
-  let error_handler _ = error_handler in
-  let _server =
-    Tcp.(
-      Server.create_sock_inet
-        ~on_handler_error:`Ignore
-        ~backlog:11_000
-        ~max_connections:10_000
-        ~max_accepts_per_batch
-        where_to_listen)
-      (fun addr sock ->
-        let fd = Socket.fd sock in
-        let reader = Input_channel.create fd in
-        let writer = Output_channel.create fd in
-        Protocol.Server.create_connection_handler
-          addr
-          ~request_handler
-          ~error_handler
-          reader
-          writer
-        >>= fun () -> Output_channel.close writer >>= fun () -> Input_channel.close reader)
-  in
-  Deferred.never ()
+let command =
+  Command.async
+    ~summary:"Start a hello world Async server"
+    Command.Let_syntax.(
+      let%map_open port =
+        flag "-p" ~doc:"int Source port to listen on" (optional_with_default 8080 int)
+      in
+      fun () ->
+        let%bind.Deferred server =
+          Server.run
+            ~backlog:11_000
+            ~initial_buffer_size:0x4000
+            ~where_to_listen:(Tcp.Where_to_listen.of_port port)
+            (fun _request -> Service.respond_bigstring text)
+        in
+        Deferred.forever () (fun () ->
+            let%map.Deferred () = after Time.Span.(of_sec 0.5) in
+            Log.Global.printf "Active connections: %d" (Tcp.Server.num_connections server));
+        Tcp.Server.close_finished_and_handlers_determined server)
 ;;
 
 let () =
-  Command.async
-    ~summary:"Start a hello world Async server"
-    Command.Param.(
-      map
-        (both
-           (flag
-              "-p"
-              (optional_with_default 8080 int)
-              ~doc:"int Source port to listen on")
-           (flag "-a" (optional_with_default 1 int) ~doc:"int Maximum accepts per batch"))
-        ~f:(fun (port, accepts) () -> main port accepts ()))
-  |> Command.run
+  Command_unix.run command
 ;;

@@ -5,7 +5,7 @@ IMAGES = cohttp-eio \
 				 httpaf-effects \
 				 cohttp-lwt-unix \
 				 httpaf-lwt \
-				 httpaf-shuttle-async \
+				 http-async \
 				 nethttp-go \
 				 rust-hyper \
 
@@ -28,7 +28,7 @@ build: cohttp-eio \
 	httpaf-effects \
 	cohttp-lwt-unix \
 	httpaf-lwt \
-	httpaf-shuttle-async \
+	http-async \
 	nethttp-go \
 	rust-hyper
 	docker build $(nc) -t $(retro) .
