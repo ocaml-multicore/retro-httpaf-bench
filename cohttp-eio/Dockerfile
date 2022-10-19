@@ -1,8 +1,8 @@
 # Build cohttp_eio.exe
-FROM ocaml/opam:debian-11-ocaml-4.12-domains AS cohttp-eio
-RUN (cd opam-repository && git pull origin 75f69f2010f203d29adb423858f93bf4406c7869 && opam update)
+FROM ocaml/opam:debian-11-ocaml-5.0 AS cohttp-eio
 WORKDIR /src
-RUN opam depext -i ppx_cstruct dune fmt logs cstruct faraday mtime optint lwt-dllist psq luv luv_unix uri ppx_sexp_conv eio_main base64 re sexplib0 ppx_sexp_conv stringext fmt uri-sexp
+RUN sudo apt-get install -qq -yy pkg-config file
+RUN opam depext -i dune eio_main.0.6 mdx uri fmt odoc
 COPY --chown=opam . /src
 RUN sudo chown opam .
 RUN opam exec -- dune build --profile=release

@@ -8,5 +8,5 @@
   branch = effects
 [submodule "cohttp-eio/ocaml-cohttp"]
 	path = cohttp-eio/vendor/ocaml-cohttp
-	url = https://github.com/bikallem/ocaml-cohttp.git
-	branch = eio-3
+  url = https://github.com/mirage/ocaml-cohttp.git
+	branch = master
