@@ -40,12 +40,13 @@ let command =
         flag "-p" ~doc:"int Source port to listen on" (optional_with_default 8080 int)
       in
       fun () ->
+        let buffer_config = Buffer_config.create ~initial_size:0x4000 () in
         let%bind.Deferred server =
           Server.run
             ~backlog:11_000
-            ~initial_buffer_size:0x4000
+            ~buffer_config
             ~where_to_listen:(Tcp.Where_to_listen.of_port port)
-            (fun _request -> Service.respond_bigstring text)
+            (fun (_request, _body_reader) -> Deferred.return (Response.create `Ok, Body.Writer.bigstring text))
         in
         Deferred.forever () (fun () ->
             let%map.Deferred () = after Time.Span.(of_sec 0.5) in
