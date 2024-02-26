@@ -40,7 +40,7 @@ let listens = [Address.make ~addr:!addr ~port:!port ()]
 let server = Server.create parameters ~listens
 
 let _ =
-  Server.add_route_handler server Route.(exact "" @/ return)
+  Server.add_route_handler server Route.(return)
     (fun _req -> Response.make_string text);
   Server.add_route_handler_chaml server Route.(exact "html" @/ return) html;
   Server.add_route_handler server Route.(exact "exit" @/ return)
