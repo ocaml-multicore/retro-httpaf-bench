@@ -7,6 +7,7 @@ export GOMAXPROCS=1
 export COHTTP_DOMAINS=1
 export HTTPAF_EIO_DOMAINS=1
 export RUST_CORES=1
+export SIMPLE_HTTPD_CORES=1
 
 rm -rf output/*
 mkdir -p output
