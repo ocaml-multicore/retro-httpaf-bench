@@ -1,0 +1,6 @@
+(executable
+  (name simple_httpd)
+  (flags :standard -warn-error -a+8)
+  (preprocess (per_module
+    ((action (run %{bin:chaml} %{input-file})) echo)))
+  (libraries simple_httpd))

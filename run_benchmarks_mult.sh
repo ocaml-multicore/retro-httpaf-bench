@@ -11,7 +11,7 @@ export RUST_CORES=24
 rm -rf output/*
 mkdir -p output
 
-for cmd in "cohttp_eio.exe" "httpaf_eio.exe" "rust_hyper.exe" "nethttp_go.exe"; do
+for cmd in "simple_httpd.exe" "cohttp_eio.exe" "httpaf_eio.exe" "rust_hyper.exe" "nethttp_go.exe" ; do
   for rps in 150000 300000 400000 800000 1500000; do
       ./build/$cmd &
       running_pid=$!

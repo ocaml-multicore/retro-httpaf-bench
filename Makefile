@@ -8,12 +8,13 @@ IMAGES = cohttp-eio \
 				 http-async \
 				 nethttp-go \
 				 rust-hyper \
+				 simple_httpd
 
 BUILD=./build
 
 # nc is --no-cache option sent to docker build
 # use is like make nc=--no-cache-build cohttp-eio
-# 
+#
 run: build
 	mkdir -p output
 	docker create --name $(retro)-tmp $(retro)
