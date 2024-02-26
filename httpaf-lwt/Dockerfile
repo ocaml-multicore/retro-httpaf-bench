@@ -1,4 +1,5 @@
 FROM ocaml/opam:debian-11-ocaml-4.12 AS ocaml-412
+RUN sudo apt-get update
 RUN sudo ln -f /usr/bin/opam-2.1 /usr/bin/opam
 RUN opam install -y conf-libev core lwt httpaf httpaf-lwt-unix
 WORKDIR /src

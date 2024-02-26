@@ -1,5 +1,5 @@
 # Build cohttp_eio.exe
-FROM ocaml/opam:debian-11-ocaml-5.1 AS cohttp-eio
+FROM ocaml/opam:debian-12-ocaml-5.1 AS cohttp-eio
 WORKDIR /src
 RUN sudo apt-get install -qq -yy pkg-config file
 RUN opam switch reinstall

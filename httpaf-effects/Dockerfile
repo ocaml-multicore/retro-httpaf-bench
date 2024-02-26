@@ -1,4 +1,5 @@
 FROM ocaml/opam:debian-11-ocaml-4.12-domains-effects AS httpaf-effects
+RUN sudo apt-get update
 RUN sudo ln -f /usr/bin/opam-2.1 /usr/bin/opam
 RUN opam pin -n aeio git+https://github.com/kayceesrk/ocaml-aeio.git
 RUN opam install -y conf-libev httpaf lwt dune aeio
