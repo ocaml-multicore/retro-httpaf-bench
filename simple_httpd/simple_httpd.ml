@@ -26,6 +26,11 @@ module Params = (val parameters)
 
 let _ = Params.max_connections := 1000
 let _ = Params.log_requests := 0
+let _ =
+  try
+    let nth = Sys.getenv "SIMPLE_HTTPD_CORES" in
+    Params.num_threads := int_of_string nth
+  with _ -> ()
 
 let _ =
   Arg.parse (Arg.align ([
@@ -34,6 +39,9 @@ let _ =
       "--port", Arg.Set_int port, " set port";
       "-p", Arg.Set_int port, " set port";
     ] @ args)) (fun _ -> raise (Arg.Bad "")) "echo [option]*"
+
+let _ = Printf.printf "listenning %s:%d using %d+1 threads\n%!"
+          !addr !port !Params.num_threads
 
 (** Server initialisation *)
 let listens = [Address.make ~addr:!addr ~port:!port ()]
