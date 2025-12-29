@@ -4,8 +4,10 @@ WORKDIR /src
 
 RUN sudo apt update \
   && sudo apt install -qq -y pkg-config file \
+  && sudo apt install -y libgmp-dev \
   && opam switch reinstall \
-  && opam install dune eio_main.1.3 mdx uri fmt
+  && opam install dune eio_main.1.3 mdx uri fmt ptime ipaddr http logs uri \
+     cohttp-lwt-unix cohttp-async
 
 COPY --chown=opam . /src
 
