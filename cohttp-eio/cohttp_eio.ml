@@ -30,11 +30,20 @@ let text =
 
 open Cohttp_eio
 
-let app (req, _reader, _client_addr) =
-  match Http.Request.resource req with
-  | "/" -> Server.text_response text
-  | "/html" -> Server.html_response text
-  | _ -> Server.not_found_response
+let () = Logs.set_reporter (Logs_fmt.reporter ())
+and () = Logs.Src.set_level Cohttp_eio.src (Some Debug)
+
+let handler _socket request _body =
+  match Http.Request.resource request with
+  | "/" -> Cohttp_eio.Server.respond_string ~status:`OK ~body:text ()
+  | "/html" ->
+      let body = Eio.Flow.string_source text in
+         Cohttp_eio.Server.respond () ~status:`OK
+        ~headers:(Http.Header.of_list [ ("content-type", "text/html") ])
+        ~body
+  | _ -> Cohttp_eio.Server.respond_string ~status:`Not_found ~body:"" ()
+
+let log_warning ex = Logs.warn (fun f -> f "%a" Eio.Exn.pp ex)
 
 let () =
   let port = ref 8080 in
@@ -42,4 +51,12 @@ let () =
     [ ("-p", Arg.Set_int port, " Listening port number(8080 by default)") ]
     ignore "An HTTP/1.1 server";
 
-  Eio_main.run @@ fun env -> Server.run ~port:!port env app
+  Eio_main.run @@ fun env ->
+  Eio.Switch.run @@ fun sw ->
+  let socket =
+    Eio.Net.listen env#net ~sw ~backlog:128 ~reuse_addr:true
+      (`Tcp (Eio.Net.Ipaddr.V4.loopback, !port))
+  and
+  server = Cohttp_eio.Server.make ~callback:handler () in
+  Cohttp_eio.Server.run socket server ~on_error:log_warning
+
