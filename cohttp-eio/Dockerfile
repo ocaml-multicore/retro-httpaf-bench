@@ -5,7 +5,7 @@ WORKDIR /src
 RUN sudo apt update \
   && sudo apt install -qq -y pkg-config file \
   && opam switch reinstall \
-  && opam install dune eio_main.0.9 mdx uri fmt
+  && opam install dune eio_main.1.3 mdx uri fmt
 
 COPY --chown=opam . /src
 
