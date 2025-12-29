@@ -1,6 +1,7 @@
 # Build cohttp_eio.exe
-FROM ocaml/opam:debian-11-ocaml-5.1 AS cohttp-eio
+FROM ocaml/opam:debian-13-ocaml-5.2 AS cohttp-eio
 WORKDIR /src
+
 RUN sudo apt-get install -qq -yy pkg-config file
 RUN opam switch reinstall
 RUN opam depext -i dune eio_main.0.6 mdx uri fmt
