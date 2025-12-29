@@ -5,8 +5,8 @@
 [submodule "httpaf-eio/angstrom"]
 	path = httpaf-eio/vendor/angstrom
 	url = https://github.com/talex5/angstrom.git
-  branch = effects
+    branch = effects
 [submodule "cohttp-eio/ocaml-cohttp"]
 	path = cohttp-eio/vendor/ocaml-cohttp
-  url = https://github.com/mirage/ocaml-cohttp.git
-	branch = master
+    url = https://github.com/mirage/ocaml-cohttp.git
+	branch = main
