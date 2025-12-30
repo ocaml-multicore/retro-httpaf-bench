@@ -1,9 +1,15 @@
-FROM ocaml/opam:debian-11-ocaml-4.12
-RUN sudo ln -f /usr/bin/opam-2.1 /usr/bin/opam
-RUN (cd opam-repository && git pull origin 06c9f5470403fb40e7b3e8561ec60ac088817c7b && opam update)
-RUN opam install -y core core_unix http_async.0.1.0
+FROM ocaml/opam:debian-13-ocaml-5.2
+
 WORKDIR /src
+
+RUN sudo ln -f /usr/bin/opam-2.5 /usr/bin/opam \
+  && opam update \
+  && opam install -y core core_unix http_async.0.1.0
+
 COPY --chown=opam . /src
-RUN sudo chown opam .
-RUN opam exec -- dune build --profile=release
-RUN sudo mv /src/_build/default/main.exe /src/http-async.exe
+
+RUN sudo chown opam . \
+  && eval $(opam env) \
+  && opam option jobs=79 --global \
+  && opam exec -- dune build --profile=release \
+  && sudo mv /src/_build/default/main.exe /src/http-async.exe
