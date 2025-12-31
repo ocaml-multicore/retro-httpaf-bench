@@ -16,7 +16,7 @@ for cmd in "cohttp_eio.exe" "httpaf_eio.exe" "http_async.exe" "rust_hyper.exe" "
       ./build/$cmd &
       running_pid=$!
       sleep 2;
-      ./build/wrk2 -t 24 -d${run_duration}s -L -s ./build/json.lua -R $rps -c 1000 http://localhost:8080 > output/run-$cmd-$rps-1000.txt;
+      ./build/wrk -t 24 -d${run_duration}s -L -s ./build/json.lua -c 1000 http://localhost:8080 > output/run-$cmd-$rps-1000.txt;
       kill ${running_pid};
       sleep 1;
   done
