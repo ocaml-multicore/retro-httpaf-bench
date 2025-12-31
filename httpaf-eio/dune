@@ -1,5 +1,3 @@
-(executable 
+(executable
  (name wrk_effects_benchmark)
- (libraries eio_main httpaf httpaf-eio faraday angstrom logs.fmt))
-
-(vendored_dirs vendor)
+ (libraries eio_main httpaf eio faraday angstrom logs.fmt))
