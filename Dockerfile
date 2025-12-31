@@ -7,7 +7,7 @@ RUN ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
 RUN apt update \
   && apt install -y libgmp-dev libev4 libev-dev pkg-config \
      build-essential libssl-dev libz-dev cmake python3-virtualenv \
-     python3-pip wget unzip \
+     python3-pip wget unzip jupyter \
      && dpkg-reconfigure --frontend noninteractive tzdata
 
 RUN mkdir ./build

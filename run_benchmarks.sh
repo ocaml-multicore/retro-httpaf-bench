@@ -22,7 +22,5 @@ for cmd in "cohttp_eio.exe" "httpaf_eio.exe" "http_async.exe" "rust_hyper.exe" "
   done
 done
 
-source build/pyenv/bin/activate
-mv build/parse_output.ipynb .
-jupyter nbconvert --to html --execute parse_output.ipynb
-mv parse_output* output/
+jupyter nbconvert ./build/parse_output.ipynb --to html
+mv ./build/parse_output.html ./output/.
