@@ -17,6 +17,7 @@ if [ ! -d "$wrk_dir" ];
     echo "The current/root directory is: `pwd`"
     cp $wrk_dir/wrk /build/.
     cp wrk2-support/json.lua /build/.
+    echo "wrk and json.lua have been copied to /build/"
   else
     echo "$wrk_dir already exists."
     echo "Checking if the wrk executable is already built."
@@ -33,6 +34,7 @@ if [ ! -d "$wrk_dir" ];
           echo "The current/root directory is: `pwd`"
           cp $wrk_dir/wrk /build/.
           cp wrk2-support/json.lua /build/.
+          echo "wrk and json.lua have been copied to /build/"
    fi
 fi
 

@@ -13,9 +13,9 @@ RUN apt update \
 RUN mkdir ./build
 WORKDIR ./build
 
-COPY ./build_wrk2.sh .
+COPY ./build_wrk.sh .
 COPY ./wrk2-support/json.lua ./wrk2-support/json.lua
-RUN ./build_wrk2.sh
+RUN ./build_wrk.sh
 
 COPY ./build_jupyter.sh .
 COPY ./notebook/parse_output.ipynb .
