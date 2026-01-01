@@ -74,5 +74,6 @@ let create_connection_handler ?config request_handler =
               writer_thread ()
         | `Close _      -> Eio.Flow.shutdown fd `Send
       in
+      (* TODO: Check if correct *)
       reader_thread();
       writer_thread()
