@@ -1,5 +1,7 @@
 open Httpaf
 module Write = Eio.Buf_write
+module EioFib = Eio.Fiber
+module Switch = Eio.Switch
 
 let debug = false
 
@@ -74,6 +76,7 @@ let create_connection_handler ?config request_handler =
               writer_thread ()
         | `Close _      -> Eio.Flow.shutdown fd `Send
       in
-      (* TODO: Check if correct *)
-      reader_thread();
-      writer_thread()
+      ignore @@
+      EioFib.both
+        (fun () -> reader_thread () )
+        (fun () -> writer_thread () );
