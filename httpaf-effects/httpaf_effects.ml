@@ -7,7 +7,7 @@ let debug = false
 
 exception Partial
 
-let read_buffer_size = 4096
+let read_buffer_size = max_int
 
 let create_connection_handler ?config request_handler =
   fun fd _ -> let conn = Server_connection.create ?config
