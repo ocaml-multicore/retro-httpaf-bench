@@ -1,4 +1,4 @@
 (executable
   (name main)
   (preprocess (pps ppx_jane))
-  (libraries core async core_unix.command_unix http_async))
+  (libraries core async core_unix.command_unix shuttle_http))

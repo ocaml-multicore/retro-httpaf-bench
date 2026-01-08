@@ -1,5 +1,5 @@
 # Build cohttp_eio.exe
-FROM ocaml/opam:debian-13-ocaml-5.2 AS cohttp-eio
+FROM ocaml/opam:debian-13-ocaml-5.4 AS cohttp-eio
 WORKDIR /src
 
 RUN sudo apt update \

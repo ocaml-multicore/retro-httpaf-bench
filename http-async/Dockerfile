@@ -1,10 +1,10 @@
-FROM ocaml/opam:debian-13-ocaml-5.2
+FROM ocaml/opam:debian-13-ocaml-5.4
 
 WORKDIR /src
 
 RUN sudo ln -f /usr/bin/opam-2.5 /usr/bin/opam \
   && opam update \
-  && opam install -y core core_unix http_async.0.1.0
+  && opam install -y core core_unix shuttle_http.0.12.0
 
 COPY --chown=opam . /src
 

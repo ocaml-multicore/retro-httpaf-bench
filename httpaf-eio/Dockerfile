@@ -1,5 +1,5 @@
 # httpaf-eio
-FROM ocaml/opam:debian-13-ocaml-5.2 AS eio
+FROM ocaml/opam:debian-13-ocaml-5.4 AS eio
 
 WORKDIR /src
 

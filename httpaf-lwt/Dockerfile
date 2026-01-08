@@ -1,4 +1,4 @@
-FROM ocaml/opam:debian-13-ocaml-5.2 AS ocaml-52
+FROM ocaml/opam:debian-13-ocaml-5.4 AS ocaml-54
 
 WORKDIR /src
 

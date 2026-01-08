@@ -1,4 +1,4 @@
-FROM ocaml/opam:debian-13-ocaml-5.2 AS httpaf-effects
+FROM ocaml/opam:debian-13-ocaml-5.4 AS httpaf-effects
 
 WORKDIR /src
 
