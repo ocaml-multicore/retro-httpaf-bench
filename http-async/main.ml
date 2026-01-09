@@ -1,6 +1,6 @@
 open! Core
 open! Async
-open Http_async
+open! Shuttle_http
 
 let text =
   "CHAPTER I. Down the Rabbit-Hole  Alice was beginning to get very tired of sitting by \
@@ -30,7 +30,15 @@ let text =
    the well, and noticed that they were filled with cupboards......"
 ;;
 
-let text = Bigstring.of_string text
+let service context request =
+    Deferred.return (Response.create ~body:(Body.string text) `Ok)
+
+let run port =
+        let server = Server.run_inet (Tcp.Where_to_listen.of_port port) service in
+        Deferred.forever () (fun () ->
+            let%map.Deferred () = after Time.Span.(of_sec 0.5) in
+            Log.Global.printf "Active connections: %d" (Tcp.Server.num_connections server));
+        Tcp.Server.close_finished_and_handlers_determined server
 
 let command =
   Command.async
@@ -39,19 +47,7 @@ let command =
       let%map_open port =
         flag "-p" ~doc:"int Source port to listen on" (optional_with_default 8080 int)
       in
-      fun () ->
-        let buffer_config = Buffer_config.create ~initial_size:0x4000 () in
-        let%bind.Deferred server =
-          Server.run
-            ~backlog:11_000
-            ~buffer_config
-            ~where_to_listen:(Tcp.Where_to_listen.of_port port)
-            (fun (_request, _body_reader) -> Deferred.return (Response.create `Ok, Body.Writer.bigstring text))
-        in
-        Deferred.forever () (fun () ->
-            let%map.Deferred () = after Time.Span.(of_sec 0.5) in
-            Log.Global.printf "Active connections: %d" (Tcp.Server.num_connections server));
-        Tcp.Server.close_finished_and_handlers_determined server)
+      fun () -> run port)
 ;;
 
 let () =

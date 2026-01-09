@@ -13,8 +13,9 @@ BUILD=./build
 
 # nc is --no-cache option sent to docker build
 # use is like make nc=--no-cache-build cohttp-eio
-# 
+#
 run: build
+	docker build $(nc) -t $(retro) .
 	mkdir -p output
 	docker create --name $(retro)-tmp $(retro)
 	docker cp ./run_benchmarks.sh $(retro)-tmp:/
@@ -34,7 +35,6 @@ build: cohttp-eio \
 	http-async \
 	nethttp-go \
 	rust-hyper
-	docker build $(nc) -t $(retro) .
 
 build-dir:
 	mkdir -p build

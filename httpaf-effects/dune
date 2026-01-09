@@ -1,7 +1,8 @@
 (env
  (dev
-  (flags (:standard -warn-error -A))))
+  (flags
+   (:standard -warn-error -A))))
 
-(executable 
+(executable
  (name wrk_effects_benchmark)
- (libraries lwt lwt.unix aeio httpaf faraday angstrom))
+ (libraries lwt lwt.unix eio_main httpaf faraday angstrom))
