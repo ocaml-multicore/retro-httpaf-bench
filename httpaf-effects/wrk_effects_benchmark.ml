@@ -27,7 +27,7 @@ let traceln fmt = traceln ("server: " ^^ fmt)
 
 let handle_request flow addr =
   traceln "Server: About to set up connection handler";
-  create_connection_handler request_handler;
+  create_connection_handler request_handler flow addr;
   traceln "Server: copied data to client; connection closed"
 
 let server_run socket =
