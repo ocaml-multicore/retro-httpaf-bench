@@ -48,25 +48,22 @@ let create_connection_handler ?config request_handler =
         | `Close -> Eio.Flow.shutdown fd `Receive
       in
       let rec writer_thread () =
-        let success = Server_connection.report_write_result conn in
-        match Server_connection.next_write_operation conn with
-        | `Write iovecs ->
-          (* TODO: Aeio.writev *)
-         let written = ref 0 in
-          begin try
-            List.iter (fun {Faraday.buffer; off; len} ->
-               let w = Write.with_flow ~initial_size:len
-                   fd (fun buffer -> Write.drain buffer;)
-                in
-                written := !written + w;
-                if w < len then raise Partial) iovecs;
-              success (`Ok !written)
-          with
-          | Partial ->
-              success (`Ok !written)
-          | _ -> success `Closed
-          end;
-          writer_thread ()
+       match Server_connection.next_write_operation conn with
+       | `Write iovecs ->
+           let written = ref 0 in
+           begin
+             try
+               List.iter (fun {Faraday.buffer; off; len} ->
+                 Write.with_flow ~initial_size:len fd (fun buf ->
+                  let s = Bigstringaf.substring buffer ~off:off ~len:len in
+                  Write.string buf s);
+                 written := !written + len
+               ) iovecs;
+               Server_connection.report_write_result conn (`Ok !written)
+             with _ ->
+               Server_connection.report_write_result conn `Closed
+           end;
+           writer_thread ()
         | `Yield        ->
             (* let tid = if debug then Aeio.get_tid () else 0xC0FFEE in *)
             let p, iv = Eio.Promise.create () in
