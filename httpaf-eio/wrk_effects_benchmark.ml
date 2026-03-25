@@ -48,7 +48,7 @@ let run_domain ssock =
     let flow, addr = Eio.Net.accept ssock ~sw in
     Fiber.fork ~sw (fun () ->
       match create_connection_handler ~error_handler request_handler flow addr with
-      | () -> ()
+      | _  -> ()
       | exception ex -> log_connection_error ex)
   done
 
