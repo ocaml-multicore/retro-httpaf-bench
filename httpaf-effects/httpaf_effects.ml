@@ -12,7 +12,7 @@ let read_buffer_size = 4096
 let create_connection_handler ?config request_handler =
   fun fd _ -> let conn = Server_connection.create ?config
                   (fun request -> request_handler request) in
-    let buffer = Lwt_bytes.create read_buffer_size in
+    let buffer = Bigstringaf.create read_buffer_size in
     let buffer_len = ref 0 in
       let rec reader_thread () =
         match Server_connection.next_read_operation conn with
