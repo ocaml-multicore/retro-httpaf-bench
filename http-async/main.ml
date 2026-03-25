@@ -30,15 +30,17 @@ let text =
    the well, and noticed that they were filled with cupboards......"
 ;;
 
-let service context request =
-    Deferred.return (Response.create ~body:(Body.string text) `Ok)
+let service _ _ =
+    let headers = Headers.of_list ["content-length", string_of_int (String.length text)] in
+    Deferred.return (Response.create ~headers ~body:(Body.string text) `Ok)
 
 let run port =
-        let server = Server.run_inet (Tcp.Where_to_listen.of_port port) service in
-        Deferred.forever () (fun () ->
-            let%map.Deferred () = after Time.Span.(of_sec 0.5) in
-            Log.Global.printf "Active connections: %d" (Tcp.Server.num_connections server));
-        Tcp.Server.close_finished_and_handlers_determined server
+  let server = Server.run_inet (Tcp.Where_to_listen.of_port port) service
+  in
+  Deferred.forever () (fun () ->
+    let%map () = after (Time_float.Span.of_sec 0.5) in
+    Log.Global.printf "Active connections: %d" (Tcp.Server.num_connections server));
+  Tcp.Server.close_finished_and_handlers_determined server
 
 let command =
   Command.async
