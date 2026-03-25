@@ -3,10 +3,6 @@ module Write = Eio.Buf_write
 module EioFib = Eio.Fiber
 module Switch = Eio.Switch
 
-let debug = false
-
-exception Partial
-
 let read_buffer_size = 4096
 
 let create_connection_handler ?config request_handler =
@@ -17,27 +13,31 @@ let create_connection_handler ?config request_handler =
       let rec reader_thread () =
         match Server_connection.next_read_operation conn with
         | `Read ->
-            begin
+          let continue =
             try
-              let current_read_len =
-                Eio.Buf_read.buffered_bytes (Eio.Buf_read.of_buffer buffer)
-              in
-              buffer_len := !buffer_len + current_read_len;
-              if current_read_len = 0 then
-                begin
-                Server_connection.read_eof conn buffer ~off:0 ~len:!buffer_len |> ignore;
-                end
-              else
-                begin
-                    let bytes_consumed =
-                     Server_connection.read conn buffer ~off:0 ~len:!buffer_len in
-                     Bigstringaf.blit buffer ~src_off:bytes_consumed
-                                      buffer ~dst_off:0 ~len:(!buffer_len - bytes_consumed);
-                        buffer_len := !buffer_len - bytes_consumed
-                end
-            with _ -> ignore(Server_connection.read_eof conn buffer ~off:0 ~len:0)
-            end;
-            reader_thread ()
+               let current_read_len =
+                 Eio.Flow.single_read fd
+                 (Cstruct.of_bigarray buffer ~off:0 ~len:(Bigstringaf.length buffer))
+               in
+                 buffer_len := !buffer_len + current_read_len;
+               let bytes_consumed =
+                 Server_connection.read conn buffer ~off:0 ~len:!buffer_len in
+               let buffer_remaining = !buffer_len - bytes_consumed in
+               let tmp = Bytes.create buffer_remaining in
+                  Bigstringaf.blit_to_bytes buffer ~src_off:bytes_consumed tmp
+                            ~dst_off:0 ~len:buffer_remaining;
+                  Bigstringaf.blit_from_bytes tmp ~src_off:0 buffer
+                            ~dst_off:0 ~len:buffer_remaining;
+               buffer_len := buffer_remaining;
+               true
+            with
+             | End_of_file ->
+               ignore (Server_connection.read_eof conn buffer ~off:0 ~len:!buffer_len);
+               false
+             | _ -> ignore(Server_connection.read_eof conn buffer ~off:0 ~len:0);
+               false
+            in
+            if continue then reader_thread ()
         | `Yield       ->
             (* let tid = if debug then Aeio.get_tid () else 0xC0FFEE in *)
             let p, iv = Eio.Promise.create () in
