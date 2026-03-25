@@ -1,5 +1,4 @@
 open Eio
-open Eio.Resource
 open Httpaf
 open Httpaf_effects
 module Read = Eio.Buf_read
@@ -27,12 +26,12 @@ let traceln fmt = traceln ("server: " ^^ fmt)
 
 let handle_request flow addr =
   traceln "Server: About to set up connection handler";
-  create_connection_handler request_handler;
+  (create_connection_handler request_handler) flow addr;
   traceln "Server: copied data to client; connection closed"
 
 let server_run socket =
    Eio.Net.run_server socket handle_request
-    ~on_error:(traceln "Error handling connection: %a" Fmt.exn)
+    ~on_error:(fun e -> traceln "Error handling connection: %a" Fmt.exn e)
     ~max_connections:1000
 
 let addr = `Tcp (Eio.Net.Ipaddr.V4.loopback, 8080)
@@ -40,6 +39,6 @@ let addr = `Tcp (Eio.Net.Ipaddr.V4.loopback, 8080)
 let () =
   Eio_main.run @@ fun env ->
   let net = Eio.Stdenv.net env in
-  Switch.run ~name:"main" @@ fun sw ->
+  Switch.run @@ fun sw ->
   let listening_socket = Eio.Net.listen net ~sw ~reuse_addr:true ~backlog:10 addr in
   Fiber.fork ~sw (fun () -> server_run listening_socket);
