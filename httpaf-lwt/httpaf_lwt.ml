@@ -18,7 +18,7 @@ module BenchmarkServer = struct
       Lwt.pause () >>= fun () ->
       (match target with
       | "/" -> Reqd.respond_with_bigstring reqd (Response.create ~headers `OK) text;
-      | "/exit" -> exit 0;
+      | "/exit" -> Stdlib.exit 0;
       | _   -> Reqd.respond_with_string    reqd (Response.create `Not_found) "Route not found");
       Lwt.return_unit
     in
@@ -57,8 +57,8 @@ let main port =
 
 let () =
   let port = ref 8080 in
-  Arg.parse
-    ["-p", Arg.Set_int port, " Listening port number (8080 by default)"]
+  Stdlib.Arg.parse
+    ["-p", Stdlib.Arg.Set_int port, " Listening port number (8080 by default)"]
     ignore
     "Responds to requests with a fixed string for benchmarking purposes.";
   main !port
